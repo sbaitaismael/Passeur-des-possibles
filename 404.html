@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page introuvable — Passeur des Possibles</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400&family=Space+Mono:wght@400&display=swap" rel="stylesheet" />
+  <style>
+    :root { --black:#0a0907; --charcoal:#1a1714; --iron:#2c2825; --smoke:#7a736a; --pale:#c8bfb0; --cream:#f0ebe3; --ember:#ff6b1a; --ember-glow:#ff9a4a; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--cream); font-family: 'Crimson Pro', serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 2rem; overflow: hidden; }
+    .bg { position: fixed; inset: 0; background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(255,107,26,0.07) 0%, transparent 70%); pointer-events: none; }
+    .grid { position: fixed; inset: 0; background-image: linear-gradient(rgba(255,107,26,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,26,0.03) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; }
+    .content { position: relative; z-index: 2; max-width: 600px; animation: fadeUp 0.8s forwards; }
+    .num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(8rem, 20vw, 14rem); line-height: 0.85; color: var(--iron); letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .num span { color: var(--ember); }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .sub { font-style: italic; color: var(--pale); font-size: 1.1rem; margin-bottom: 0.8rem; }
+    .quote { font-family: 'Space Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; color: var(--smoke); border-left: 2px solid var(--ember); padding-left: 1rem; text-align: left; margin: 2rem auto; max-width: 420px; }
+    .links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem; }
+    .btn { display: inline-block; padding: 0.85rem 2rem; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.1em; text-decoration: none; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); transition: all 0.3s; }
+    .btn-p { background: var(--ember); color: var(--black); }
+    .btn-p:hover { background: var(--ember-glow); }
+    .btn-s { border: 1px solid var(--iron); color: var(--pale); }
+    .btn-s:hover { border-color: var(--ember); color: var(--ember-glow); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="grid"></div>
+  <div class="content">
+    <div class="num">4<span>0</span>4</div>
+    <h1 class="title">Cette page n'a pas encore été forgée</h1>
+    <p class="sub">Le métal était là, mais le forgeron est passé ailleurs.</p>
+    <p class="quote">"Toute impasse est un atelier en attente d'un bon artisan."<br><br>— Ismail · Passeur des Possibles</p>
+    <div class="links">
+      <a href="index.html" class="btn btn-p">Retour à l'accueil</a>
+      <a href="qui-suis-je.html" class="btn btn-s">Qui suis-je</a>
+      <a href="accompagnement-parental.html" class="btn btn-s">Accompagnement</a>
+    </div>
+  </div>
+</body>
+</html>
