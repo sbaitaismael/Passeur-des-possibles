@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suivi Éducatif Jeunes — Passeur des Possibles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black: #0a0907;
+      --charcoal: #1a1714;
+      --iron: #2c2825;
+      --ash: #4a4540;
+      --smoke: #7a736a;
+      --pale: #c8bfb0;
+      --cream: #f0ebe3;
+      --ember: #ff6b1a;
+      --ember-glow: #ff9a4a;
+      --ember-deep: #8b3a0f;
+      --gold: #d4a853;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      padding: 1.2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(to bottom, rgba(10,9,7,0.97) 0%, transparent 100%);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem; letter-spacing: 0.12em;
+      color: var(--ember); text-decoration: none;
+    }
+    .nav-logo span { color: var(--pale); }
+    .nav-back {
+      font-family: 'Space Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--smoke); text-decoration: none; transition: color 0.3s;
+    }
+    .nav-back:hover { color: var(--ember-glow); }
+
+    /* HERO */
+    #hero {
+      min-height: 70vh; display: flex; align-items: flex-end;
+      position: relative; overflow: hidden;
+      padding: 8rem 3rem 5rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 50% 60% at 80% 40%, rgba(255,107,26,0.1) 0%, transparent 70%),
+        linear-gradient(160deg, var(--black) 0%, #110d0a 100%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,107,26,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,107,26,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 900px; }
+    .breadcrumb {
+      font-family: 'Space Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--smoke); margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
+    }
+    .breadcrumb a { color: var(--ember); text-decoration: none; }
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--black); background: var(--ember);
+      padding: 0.25rem 0.8rem; margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.6s 0.2s forwards;
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 0.93; letter-spacing: 0.02em; margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.7s 0.3s forwards;
+    }
+    .hero-title .accent { color: var(--ember); }
+    .hero-sub {
+      font-size: 1.2rem; font-weight: 300; font-style: italic;
+      color: var(--pale); max-width: 620px; margin-bottom: 2rem;
+      opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+      border-left: 2px solid var(--ember-deep); padding-left: 1.2rem;
+    }
+    .hero-meta {
+      display: flex; gap: 2.5rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.7s 0.65s forwards;
+    }
+    .meta-item {
+      font-family: 'Space Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--smoke);
+    }
+    .meta-item strong { display: block; color: var(--ember); font-size: 1.1rem; margin-bottom: 0.1rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em; }
+
+    /* LAYOUT */
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 5rem 3rem; }
+    .section-label {
+      font-family: 'Space Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--ember); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1; letter-spacing: 0.03em; margin-bottom: 2rem;
+    }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s, transform 0.7s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* CONTEXTE */
+    #contexte { background: var(--charcoal); border-top: 1px solid var(--iron); }
+    .contexte-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .contexte-text p {
+      color: var(--pale); font-size: 1.05rem; line-height: 1.75;
+      margin-bottom: 1.2rem;
+    }
+    .contexte-text em { color: var(--ember-glow); font-style: italic; }
+    .contexte-text strong { color: var(--cream); font-weight: 600; }
+    .encart {
+      background: var(--black); border: 1px solid var(--iron);
+      border-left: 3px solid var(--ember); padding: 2rem;
+    }
+    .encart-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
+      color: var(--ember); letter-spacing: 0.05em; margin-bottom: 1rem;
+    }
+    .encart p { color: var(--smoke); font-size: 0.95rem; line-height: 1.7; margin-bottom: 0.8rem; }
+    .encart p:last-child { margin-bottom: 0; }
+
+    /* PROFILS */
+    #profils { background: var(--black); border-top: 1px solid var(--iron); }
+    .profils-intro { color: var(--pale); font-size: 1.05rem; max-width: 680px; margin-bottom: 3rem; font-style: italic; }
+    .profils-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--iron); margin-bottom: 3rem; }
+    .profil-card {
+      background: var(--charcoal); padding: 2rem 1.8rem;
+      position: relative; overflow: hidden;
+    }
+    .profil-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: var(--ember);
+    }
+    .profil-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+    .profil-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
+      color: var(--cream); letter-spacing: 0.05em; margin-bottom: 0.6rem;
+    }
+    .profil-desc { font-size: 0.92rem; color: var(--smoke); line-height: 1.6; }
+    .profil-tag {
+      display: inline-block; margin-top: 1rem;
+      font-family: 'Space Mono', monospace; font-size: 0.55rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--ember); border: 1px solid var(--ember-deep); padding: 0.2rem 0.5rem;
+    }
+
+    /* MODALITES */
+    #modalites { background: var(--charcoal); border-top: 1px solid var(--iron); }
+    .modalites-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .modalite-card {
+      background: var(--black); border: 1px solid var(--iron); padding: 2rem;
+      transition: border-color 0.3s;
+    }
+    .modalite-card:hover { border-color: var(--ash); }
+    .modalite-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 3rem;
+      color: var(--iron); line-height: 1; margin-bottom: 0.5rem;
+    }
+    .modalite-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
+      color: var(--ember); letter-spacing: 0.05em; margin-bottom: 0.8rem;
+    }
+    .modalite-desc { color: var(--smoke); font-size: 0.95rem; line-height: 1.7; }
+    .modalite-desc strong { color: var(--pale); }
+
+    /* POSTURE */
+    #posture { background: var(--black); border-top: 1px solid var(--iron); }
+    .posture-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; align-items: start; }
+    .posture-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; }
+    .posture-item {
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      padding-bottom: 1.5rem; border-bottom: 1px solid var(--iron);
+    }
+    .posture-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .posture-marker {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem;
+      color: var(--ember); line-height: 1; min-width: 2rem; padding-top: 0.1rem;
+    }
+    .posture-content h4 {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
+      color: var(--cream); letter-spacing: 0.05em; margin-bottom: 0.4rem;
+    }
+    .posture-content p { color: var(--smoke); font-size: 0.93rem; line-height: 1.6; }
+    .posture-aside {
+      background: var(--charcoal); border: 1px solid var(--iron);
+      padding: 2rem; position: sticky; top: 6rem;
+    }
+    .aside-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem;
+      color: var(--ember); letter-spacing: 0.05em; margin-bottom: 1.2rem;
+    }
+    .aside-quote {
+      font-style: italic; color: var(--pale); font-size: 1rem;
+      line-height: 1.6; border-left: 2px solid var(--ember-deep);
+      padding-left: 1rem; margin-bottom: 1rem;
+    }
+    .aside-author {
+      font-family: 'Space Mono', monospace; font-size: 0.58rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--smoke);
+    }
+
+    /* DISPOSITIF */
+    #dispositif { background: var(--charcoal); border-top: 1px solid var(--iron); }
+    .dispositif-content { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .dispositif-text p { color: var(--pale); font-size: 1.05rem; line-height: 1.75; margin-bottom: 1.2rem; }
+    .dispositif-text strong { color: var(--cream); }
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .timeline-item { display: flex; gap: 1.5rem; position: relative; }
+    .timeline-item:not(:last-child)::after {
+      content: ''; position: absolute;
+      left: 0.95rem; top: 2.5rem; bottom: -1.5rem;
+      width: 1px; background: var(--iron);
+    }
+    .timeline-dot {
+      width: 2rem; height: 2rem; border-radius: 50%;
+      background: var(--ember-deep); border: 2px solid var(--ember);
+      flex-shrink: 0; margin-top: 0.2rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem;
+    }
+    .timeline-body { padding-bottom: 2rem; }
+    .timeline-phase {
+      font-family: 'Space Mono', monospace; font-size: 0.58rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--ember);
+      margin-bottom: 0.3rem;
+    }
+    .timeline-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
+      color: var(--cream); letter-spacing: 0.05em; margin-bottom: 0.4rem;
+    }
+    .timeline-desc { color: var(--smoke); font-size: 0.9rem; line-height: 1.6; }
+
+    /* CTA */
+    #cta { background: var(--black); border-top: 1px solid var(--iron); text-align: center; }
+    .cta-inner { max-width: 680px; margin: 0 auto; }
+    .cta-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1; margin-bottom: 1.2rem;
+    }
+    .cta-sub { color: var(--pale); font-style: italic; font-size: 1.1rem; margin-bottom: 2.5rem; }
+    .btn-primary {
+      display: inline-block; padding: 0.9rem 2.2rem;
+      background: var(--ember); color: var(--black);
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em;
+      text-decoration: none;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      transition: background 0.3s, transform 0.2s; margin: 0.4rem;
+    }
+    .btn-primary:hover { background: var(--ember-glow); transform: translateY(-2px); }
+    .btn-secondary {
+      display: inline-block; padding: 0.9rem 2.2rem;
+      border: 1px solid var(--ash); color: var(--pale);
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em;
+      text-decoration: none;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      transition: border-color 0.3s, color 0.3s; margin: 0.4rem;
+    }
+    .btn-secondary:hover { border-color: var(--ember); color: var(--ember-glow); }
+
+    /* FOOTER */
+    footer {
+      background: var(--black); border-top: 1px solid var(--iron);
+      padding: 2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.12em; color: var(--ember); }
+    .footer-copy { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--ash); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .section-inner { padding: 3.5rem 1.5rem; }
+      .contexte-grid, .posture-grid, .dispositif-content, .modalites-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .profils-grid { grid-template-columns: 1fr; }
+      .posture-aside { position: static; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Passeur<span>desPossibles</span></a>
+    <a href="index.html#accompagnement" class="nav-back">← Retour à l'accueil</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <p class="breadcrumb"><a href="index.html">Accueil</a> → Accompagnement → Suivi Éducatif</p>
+      <div class="hero-tag">Accompagnement · Jeunesse · Insertion</div>
+      <h1 class="hero-title">
+        Suivi<br>
+        <span class="accent">Éducatif</span><br>
+        Jeunes
+      </h1>
+      <p class="hero-sub">
+        Un accompagnement ancré dans la réalité des jeunes 16–18 ans en rupture — ni injonction, ni abandon. Une présence éducative qui forge les possibles là où les institutions ont souvent renoncé.
+      </p>
+      <div class="hero-meta">
+        <div class="meta-item">
+          <strong>16–18 ans</strong>
+          Tranche d'âge cible
+        </div>
+        <div class="meta-item">
+          <strong>AFPA Lomme</strong>
+          Dispositif Promo 16-18
+        </div>
+        <div class="meta-item">
+          <strong>12 ans</strong>
+          D'expérience terrain
+        </div>
+        <div class="meta-item">
+          <strong>DEJEPS</strong>
+          Animation sociale
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEXTE D'INTERVENTION -->
+  <section id="contexte">
+    <div class="section-inner">
+      <div class="contexte-grid">
+        <div class="contexte-text reveal">
+          <p class="section-label">✦ Contexte d'intervention</p>
+          <h2 class="section-title">Pourquoi ces jeunes<br>sont là</h2>
+          <p>
+            Les jeunes de 16 à 18 ans accompagnés dans le cadre du dispositif <strong>Promo 16-18</strong> ne sont pas des jeunes "en difficulté" au sens générique. Ce sont des jeunes qui ont <em>décroché d'un système scolaire qui ne leur correspondait pas</em>, ou que ce système a lui-même lâché.
+          </p>
+          <p>
+            Derrière chaque situation, une histoire singulière : une famille fragilisée, un parcours semé de ruptures institutionnelles, une image de soi abîmée par des années d'échec ou d'invisibilité. Ces jeunes ne manquent pas de potentiel — ils manquent d'un <em>espace où ce potentiel peut se déployer sans jugement.</em>
+          </p>
+          <p>
+            L'accompagnement éducatif que je propose ne cherche pas à "remettre dans le rang". Il cherche à <strong>identifier ce qui tient debout</strong> chez chaque jeune, et à construire à partir de là.
+          </p>
+        </div>
+        <div class="reveal">
+          <div class="encart">
+            <div class="encart-title">📍 Le dispositif Promo 16-18</div>
+            <p>Dispositif national d'insertion porté par l'AFPA, destiné aux jeunes de 16 à 18 ans sans qualification, sans emploi, et hors de tout dispositif de formation.</p>
+            <p>Objectif : construire un projet d'orientation réaliste et motivant, en alternant découverte des métiers, remobilisation scolaire et accompagnement éducatif individualisé.</p>
+            <p>Expérience acquise à l'<strong>AFPA de Lomme</strong>, en lien direct avec les équipes pédagogiques et les partenaires de l'insertion.</p>
+          </div>
+          <div class="encart" style="margin-top:1.5rem; border-left-color: var(--gold);">
+            <div class="encart-title" style="color:var(--gold);">⚖️ Cadre légal & éthique</div>
+            <p>Intervention respectant le cadre de la protection de l'enfance, la confidentialité des situations, et la co-construction avec le jeune et sa famille.</p>
+            <p>Posture éducative fondée sur le <strong>droit à l'autodétermination</strong> du jeune, même mineur.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFILS DES JEUNES -->
+  <section id="profils">
+    <div class="section-inner">
+      <p class="section-label reveal">✦ Profils accompagnés</p>
+      <h2 class="section-title reveal">Les jeunes que je rencontre</h2>
+      <p class="profils-intro reveal">
+        Chaque jeune est unique — mais certaines situations reviennent, certaines fragilités se ressemblent. Les voici, sans étiquette ni diagnostic.
+      </p>
+      <div class="profils-grid">
+        <div class="profil-card reveal">
+          <div class="profil-icon">🧱</div>
+          <div class="profil-name">Le mur scolaire</div>
+          <p class="profil-desc">Jeune qui a accumulé les échecs, les redoublements, les orientations subies. L'école est devenue un lieu de douleur. Il ne "refuse" pas d'apprendre — il a appris à se protéger de l'échec.</p>
+          <span class="profil-tag">Décrochage scolaire</span>
+        </div>
+        <div class="profil-card reveal">
+          <div class="profil-icon">🌫️</div>
+          <div class="profil-name">L'invisible</div>
+          <p class="profil-desc">Ni agité ni brillant. Passé entre les mailles. Personne n'a remarqué qu'il était là, ni qu'il partait. Son décrochage a été silencieux, progressif, presque logique.</p>
+          <span class="profil-tag">Rupture progressive</span>
+        </div>
+        <div class="profil-card reveal">
+          <div class="profil-icon">⚡</div>
+          <div class="profil-name">L'électron libre</div>
+          <p class="profil-desc">Énergie débordante, besoin de mouvement, d'action, de concret. Les cadres rigides l'ont épuisé. Il a besoin d'un accompagnement qui parte de ses forces, pas de ses manques.</p>
+          <span class="profil-tag">Hyperactivité · TDAH</span>
+        </div>
+        <div class="profil-card reveal">
+          <div class="profil-icon">🏠</div>
+          <div class="profil-name">Le porteur de famille</div>
+          <p class="profil-desc">Jeune qui porte bien plus que son âge ne le devrait. Problèmes familiaux, précarité, rôle parental inversé. Son projet personnel est passé après celui des autres depuis trop longtemps.</p>
+          <span class="profil-tag">Vulnérabilité familiale</span>
+        </div>
+        <div class="profil-card reveal">
+          <div class="profil-icon">🌍</div>
+          <div class="profil-name">Le nouveau venu</div>
+          <p class="profil-desc">Mineur arrivé récemment, parfois sans famille, avec un parcours migratoire difficile. La barrière de la langue s'ajoute à la rupture culturelle. Il faut reconstruire des repères avant de construire un projet.</p>
+          <span class="profil-tag">MNA · Primo-arrivant</span>
+        </div>
+        <div class="profil-card reveal">
+          <div class="profil-icon">🎯</div>
+          <div class="profil-name">Celui qui cherche</div>
+          <p class="profil-desc">Pas vraiment en rupture, mais sans direction. Il a quitté une voie qui ne lui convenait pas, sans en avoir trouvé une autre. Il a besoin d'espace pour explorer, pas d'orientation prématurée.</p>
+          <span class="profil-tag">Orientation · Projet de vie</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODALITES D'INTERVENTION -->
+  <section id="modalites">
+    <div class="section-inner">
+      <p class="section-label reveal">✦ Comment j'interviens</p>
+      <h2 class="section-title reveal">Modalités d'accompagnement</h2>
+      <div class="modalites-grid">
+        <div class="modalite-card reveal">
+          <div class="modalite-num">01</div>
+          <div class="modalite-title">Entretien individuel</div>
+          <p class="modalite-desc">Espace de parole régulier, confidentiel et sans jugement. <strong>Le jeune fixe l'agenda</strong> — ce dont il a besoin de parler prime sur ce que l'institution attend qu'il dise. Fréquence adaptée à la situation.</p>
+        </div>
+        <div class="modalite-card reveal">
+          <div class="modalite-num">02</div>
+          <div class="modalite-title">Travail sur le projet</div>
+          <p class="modalite-desc">Co-construction d'un projet d'orientation ou d'insertion à partir des <strong>intérêts réels du jeune</strong>, pas des cases disponibles. Exploration des métiers, immersions, rencontres professionnelles.</p>
+        </div>
+        <div class="modalite-card reveal">
+          <div class="modalite-num">03</div>
+          <div class="modalite-title">Remobilisation cognitive</div>
+          <p class="modalite-desc">Retravail du rapport au savoir à travers des <strong>supports concrets et contextualisés</strong>. Pas de retour à l'école — une réappropriation des compétences de base par le sens et l'utilité.</p>
+        </div>
+        <div class="modalite-card reveal">
+          <div class="modalite-num">04</div>
+          <div class="modalite-title">Lien avec la famille</div>
+          <p class="modalite-desc">Quand c'est possible et souhaité, <strong>articulation avec les parents ou les référents familiaux</strong>. Ni ingérence, ni exclusion — la famille reste une ressource à mobiliser, pas un obstacle à contourner.</p>
+        </div>
+        <div class="modalite-card reveal">
+          <div class="modalite-num">05</div>
+          <div class="modalite-title">Réseau partenaires</div>
+          <p class="modalite-desc">Activation du réseau local : <strong>Mission Locale, PAEJ, CCAS, structures d'insertion</strong>. L'accompagnement éducatif ne s'arrête pas aux murs d'une structure — il s'ancre dans le territoire.</p>
+        </div>
+        <div class="modalite-card reveal">
+          <div class="modalite-num">06</div>
+          <div class="modalite-title">Médiation & animation</div>
+          <p class="modalite-desc">Utilisation d'<strong>activités, de learning games et d'outils créatifs</strong> comme vecteurs d'expression et de mobilisation. Le jeu, le défi, la création comme leviers éducatifs à part entière.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POSTURE ÉDUCATIVE -->
+  <section id="posture">
+    <div class="section-inner">
+      <div class="posture-grid">
+        <div>
+          <p class="section-label reveal">✦ Ma posture éducative</p>
+          <h2 class="section-title reveal">Ce en quoi<br>je crois</h2>
+          <ul class="posture-list">
+            <li class="posture-item reveal">
+              <div class="posture-marker">▸</div>
+              <div class="posture-content">
+                <h4>La relation avant tout</h4>
+                <p>Aucun outil, aucun dispositif ne fonctionne sans une relation de confiance. Je prends le temps qu'il faut pour que le jeune sente qu'il n'est pas un dossier à traiter.</p>
+              </div>
+            </li>
+            <li class="posture-item reveal">
+              <div class="posture-marker">▸</div>
+              <div class="posture-content">
+                <h4>Partir des ressources, pas des manques</h4>
+                <p>Chaque jeune a des forces, des compétences, des savoirs informels. Mon travail commence par les identifier — pas par lister ce qui manque pour le conformer à une norme.</p>
+              </div>
+            </li>
+            <li class="posture-item reveal">
+              <div class="posture-marker">▸</div>
+              <div class="posture-content">
+                <h4>Le cadre comme espace de liberté</h4>
+                <p>Un cadre clair n'est pas une contrainte — c'est ce qui permet d'aller loin en sécurité. Je pose des limites explicites et négociées, pas des règles arbitraires.</p>
+              </div>
+            </li>
+            <li class="posture-item reveal">
+              <div class="posture-marker">▸</div>
+              <div class="posture-content">
+                <h4>L'erreur comme outil pédagogique</h4>
+                <p>Ces jeunes ont souvent appris que l'erreur est une honte. Je travaille à inverser ça — l'erreur est une information, pas une sentence. On recommence, on ajuste, on avance.</p>
+              </div>
+            </li>
+            <li class="posture-item reveal">
+              <div class="posture-marker">▸</div>
+              <div class="posture-content">
+                <h4>La cohérence éducateur-formateur</h4>
+                <p>Ma double casquette d'éducateur de terrain et de formateur certifié n'est pas un hasard — je pense que le travail éducatif se renforce quand on comprend les mécanismes d'apprentissage.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="posture-aside reveal">
+          <div class="aside-title">Ce que j'ai appris à Lomme</div>
+          <p class="aside-quote">
+            "Un jeune qui arrive en Promo 16-18 n'a pas besoin qu'on lui explique qu'il a raté. Il le sait déjà. Il a besoin qu'on lui montre que ce n'est pas une fatalité."
+          </p>
+          <p class="aside-author">— Ismael, AFPA Lomme</p>
+          <hr style="border:none; border-top:1px solid var(--iron); margin: 1.5rem 0;" />
+          <div class="aside-title">Références théoriques</div>
+          <p style="color:var(--smoke); font-size:0.9rem; line-height:1.7;">
+            Approche socio-constructiviste · Pédagogie de projet · Éducation populaire · Accompagnement à l'autodétermination · Approche systémique familiale
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISPOSITIF PROMO 16-18 -->
+  <section id="dispositif">
+    <div class="section-inner">
+      <p class="section-label reveal">✦ Expérience terrain</p>
+      <h2 class="section-title reveal">Le dispositif Promo 16-18<br>à l'AFPA de Lomme</h2>
+      <div class="dispositif-content">
+        <div class="dispositif-text reveal">
+          <p>
+            Le dispositif <strong>Promo 16-18</strong> de l'AFPA de Lomme constitue l'expérience centrale de mon parcours auprès des jeunes en insertion. Ce dispositif s'adresse à des jeunes de <strong>16 à 18 ans révolus</strong>, sans qualification, sans emploi, et sans solution de formation.
+          </p>
+          <p>
+            Mon rôle y était à la fois <em>éducatif, pédagogique et d'interface</em> : accompagner chaque jeune dans la construction d'un projet d'orientation réaliste, en lien avec les réalités du marché du travail local et les ressources de l'insertion professionnelle dans la métropole lilloise.
+          </p>
+          <p>
+            Ce travail m'a conduit à développer des <strong>outils pédagogiques adaptés</strong> — supports de découverte des métiers, grilles d'auto-évaluation des compétences, séquences de remobilisation — ainsi qu'une connaissance fine du réseau partenarial local : Mission Locale de Lille, structures d'hébergement jeunes, PAEJ, Maisons de quartier.
+          </p>
+        </div>
+        <div class="reveal">
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot">①</div>
+              <div class="timeline-body">
+                <div class="timeline-phase">Phase 1 · Semaines 1–3</div>
+                <div class="timeline-title">Accueil & diagnostic</div>
+                <p class="timeline-desc">Instaurer la relation, évaluer la situation globale du jeune (logement, santé, situation familiale), identifier les freins et les ressources.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot">②</div>
+              <div class="timeline-body">
+                <div class="timeline-phase">Phase 2 · Semaines 4–8</div>
+                <div class="timeline-title">Exploration & découverte</div>
+                <p class="timeline-desc">Découverte des secteurs professionnels par l'immersion et le concret. Visites, rencontres, plateaux techniques AFPA. Le jeune explore sans s'engager.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot">③</div>
+              <div class="timeline-body">
+                <div class="timeline-phase">Phase 3 · Semaines 9–14</div>
+                <div class="timeline-title">Construction du projet</div>
+                <p class="timeline-desc">Affinage du projet d'orientation. Recherche de solutions concrètes : apprentissage, formation qualifiante, EPIDE, service civique, emploi direct.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot">④</div>
+              <div class="timeline-body">
+                <div class="timeline-phase">Phase 4 · Semaines 15–18</div>
+                <div class="timeline-title">Mise en œuvre & relais</div>
+                <p class="timeline-desc">Accompagnement dans les démarches concrètes, constitution des dossiers, et passage de relais vers la structure ou le dispositif suivant.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta">
+    <div class="section-inner">
+      <div class="cta-inner reveal">
+        <p class="section-label">✦ Travailler ensemble</p>
+        <h2 class="cta-title">Tu accompagnes<br>des jeunes aussi ?</h2>
+        <p class="cta-sub">Éducateur, formateur, conseiller Mission Locale, référent ASE — si tu travailles auprès de jeunes 16-18 ans et que tu cherches à enrichir tes pratiques, échangeons.</p>
+        <div>
+          <a href="index.html#contact" class="btn-primary">Prendre contact</a>
+          <a href="index.html#accompagnement" class="btn-secondary">Voir les autres accompagnements</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Passeur des Possibles</div>
+    <div class="footer-copy">© 2025 Ismael · Tous droits réservés</div>
+    <a href="index.html" style="font-family:'Space Mono',monospace; font-size:0.58rem; letter-spacing:0.12em; color:var(--ash); text-decoration:none;">← Retour à l'accueil</a>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.08 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

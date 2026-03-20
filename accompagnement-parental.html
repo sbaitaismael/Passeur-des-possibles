@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accompagnement Parental — Passeur des Possibles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black: #0a0907;
+      --charcoal: #1a1714;
+      --iron: #2c2825;
+      --ash: #4a4540;
+      --smoke: #7a736a;
+      --pale: #c8bfb0;
+      --cream: #f0ebe3;
+      --ember: #ff6b1a;
+      --ember-glow: #ff9a4a;
+      --ember-deep: #8b3a0f;
+      --gold: #d4a853;
+      --gold-deep: #8a6520;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      padding: 1.2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(to bottom, rgba(10,9,7,0.97) 0%, transparent 100%);
+    }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.12em; color: var(--ember); text-decoration: none; }
+    .nav-logo span { color: var(--pale); }
+    .nav-back { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--smoke); text-decoration: none; transition: color 0.3s; }
+    .nav-back:hover { color: var(--ember-glow); }
+
+    /* HERO */
+    #hero {
+      min-height: 72vh; display: flex; align-items: flex-end;
+      position: relative; overflow: hidden; padding: 8rem 3rem 5rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 55% 55% at 80% 35%, rgba(212,168,83,0.09) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 50% at 10% 70%, rgba(255,107,26,0.07) 0%, transparent 60%),
+        linear-gradient(160deg, var(--black) 0%, #0e0c09 100%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(212,168,83,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212,168,83,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 900px; }
+    .breadcrumb { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--smoke); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s 0.1s forwards; }
+    .breadcrumb a { color: var(--ember); text-decoration: none; }
+    .hero-tag { display: inline-block; font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--black); background: var(--gold); padding: 0.25rem 0.8rem; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s 0.2s forwards; }
+    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.93; letter-spacing: 0.02em; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.7s 0.3s forwards; }
+    .hero-title .accent { color: var(--gold); }
+    .hero-sub { font-size: 1.2rem; font-weight: 300; font-style: italic; color: var(--pale); max-width: 620px; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.7s 0.5s forwards; border-left: 2px solid var(--gold-deep); padding-left: 1.2rem; }
+    .hero-meta { display: flex; gap: 2.5rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.7s 0.65s forwards; }
+    .meta-item { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--smoke); }
+    .meta-item strong { display: block; color: var(--gold); font-size: 1.1rem; margin-bottom: 0.1rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em; }
+
+    /* LAYOUT */
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 5rem 3rem; }
+    .section-label { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ember); margin-bottom: 1rem; }
+    .section-label.gold { color: var(--gold); }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1; letter-spacing: 0.03em; margin-bottom: 2rem; }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s, transform 0.7s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* POURQUOI */
+    #pourquoi { background: var(--charcoal); border-top: 1px solid var(--iron); }
+    .pourquoi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .body-text p { color: var(--pale); font-size: 1.05rem; line-height: 1.75; margin-bottom: 1.2rem; }
+    .body-text em { color: var(--ember-glow); font-style: italic; }
+    .body-text strong { color: var(--cream); font-weight: 600; }
+    .encart { background: var(--black); border: 1px solid var(--iron); border-left: 3px solid var(--gold); padding: 2rem; }
+    .encart-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--gold); letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .encart p { color: var(--smoke); font-size: 0.95rem; line-height: 1.7; margin-bottom: 0.8rem; }
+    .encart p:last-child { margin-bottom: 0; }
+    .signal-list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.5rem; }
+    .signal-item { display: flex; gap: 0.8rem; align-items: flex-start; font-size: 0.95rem; color: var(--smoke); line-height: 1.5; }
+    .signal-item::before { content: '→'; color: var(--gold); flex-shrink: 0; font-family: 'Space Mono', monospace; }
+
+    /* OFFRE */
+    #offre { background: var(--black); border-top: 1px solid var(--iron); }
+    .offre-intro { color: var(--pale); font-style: italic; font-size: 1.1rem; max-width: 680px; margin-bottom: 3.5rem; }
+    .offre-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--iron); margin-bottom: 3rem; }
+    .offre-card {
+      background: var(--charcoal); padding: 2.5rem 2rem;
+      position: relative; overflow: hidden;
+      transition: background 0.3s;
+    }
+    .offre-card:hover { background: var(--iron); }
+    .offre-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s; }
+    .offre-card:hover::after { transform: scaleX(1); }
+    .offre-icon { font-size: 2.2rem; margin-bottom: 1.2rem; }
+    .offre-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 0.05em; color: var(--gold); margin-bottom: 0.3rem; }
+    .offre-format { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--smoke); margin-bottom: 1rem; }
+    .offre-desc { font-size: 0.95rem; color: var(--pale); line-height: 1.65; margin-bottom: 1.2rem; }
+    .offre-details { display: flex; flex-direction: column; gap: 0.4rem; }
+    .offre-detail { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; color: var(--smoke); display: flex; gap: 0.6rem; align-items: center; }
+    .offre-detail span:first-child { color: var(--ember); }
+
+    /* FORMULES */
+    #formules { background: var(--charcoal); border-top: 1px solid var(--iron); }
+    .formules-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    .formule-card {
+      background: var(--black); border: 1px solid var(--iron); padding: 2.5rem 2rem;
+      position: relative; transition: border-color 0.3s, transform 0.3s;
+    }
+    .formule-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .formule-card.featured {
+      border-color: var(--gold); background: #0f0e0b;
+    }
+    .featured-badge {
+      position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+      background: var(--gold); color: var(--black);
+      font-family: 'Space Mono', monospace; font-size: 0.55rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 0.2rem 0.8rem; white-space: nowrap;
+    }
+    .formule-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--cream); letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+    .formule-subtitle { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--smoke); margin-bottom: 1.5rem; }
+    .formule-price { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--gold); line-height: 1; margin-bottom: 0.2rem; }
+    .formule-price-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--smoke); margin-bottom: 1.5rem; }
+    .formule-includes { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2rem; }
+    .formule-includes li { font-size: 0.93rem; color: var(--pale); display: flex; gap: 0.6rem; }
+    .formule-includes li::before { content: '✓'; color: var(--gold); font-family: 'Space Mono', monospace; flex-shrink: 0; }
+    .formule-includes li.muted { color: var(--ash); }
+    .formule-includes li.muted::before { content: '–'; color: var(--ash); }
+    .btn-formule {
+      display: block; text-align: center; padding: 0.8rem 1.5rem;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 0.1em;
+      text-decoration: none;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+      transition: all 0.3s;
+    }
+    .btn-formule.primary { background: var(--gold); color: var(--black); }
+    .btn-formule.primary:hover { background: var(--ember-glow); }
+    .btn-formule.secondary { border: 1px solid var(--ash); color: var(--pale); }
+    .btn-formule.secondary:hover { border-color: var(--gold); color: var(--gold); }
+    .tarif-note { text-align: center; margin-top: 2rem; font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; color: var(--smoke); }
+
+    /* DEROULEMENT */
+    #deroulement { background: var(--black); border-top: 1px solid var(--iron); }
+    .deroulement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step { display: flex; gap: 1.5rem; position: relative; }
+    .step:not(:last-child)::after { content: ''; position: absolute; left: 1.45rem; top: 3rem; bottom: -1px; width: 1px; background: var(--iron); }
+    .step-dot { width: 3rem; height: 3rem; border-radius: 50%; background: var(--ember-deep); border: 2px solid var(--ember); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--ember); }
+    .step-body { padding-bottom: 2.5rem; }
+    .step-num { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ember); margin-bottom: 0.3rem; }
+    .step-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--cream); letter-spacing: 0.05em; margin-bottom: 0.4rem; }
+    .step-desc { color: var(--smoke); font-size: 0.93rem; line-height: 1.6; }
+    .aside-block { background: var(--charcoal); border: 1px solid var(--iron); padding: 2rem; position: sticky; top: 6rem; }
+    .aside-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--gold); letter-spacing: 0.05em; margin-bottom: 1.2rem; }
+    .aside-quote { font-style: italic; color: var(--pale); font-size: 1rem; line-height: 1.6; border-left: 2px solid var(--gold-deep); padding-left: 1rem; margin-bottom: 1rem; }
+    .aside-author { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--smoke); }
+    .aside-faq { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1.2rem; }
+    .faq-item { border-bottom: 1px solid var(--iron); padding-bottom: 1.2rem; }
+    .faq-q { font-family: 'Space Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; color: var(--cream); margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.9rem; color: var(--smoke); line-height: 1.6; }
+
+    /* POSTURE */
+    #posture { background: var(--charcoal); border-top: 1px solid var(--iron); }
+    .posture-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .posture-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; }
+    .posture-item { display: flex; gap: 1.2rem; align-items: flex-start; padding-bottom: 1.5rem; border-bottom: 1px solid var(--iron); }
+    .posture-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .posture-marker { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--ember); line-height: 1; min-width: 2rem; padding-top: 0.1rem; }
+    .posture-content h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--cream); letter-spacing: 0.05em; margin-bottom: 0.4rem; }
+    .posture-content p { color: var(--smoke); font-size: 0.93rem; line-height: 1.6; }
+
+    /* CTA */
+    #cta { background: var(--black); border-top: 1px solid var(--iron); text-align: center; }
+    .cta-inner { max-width: 680px; margin: 0 auto; }
+    .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1; margin-bottom: 1.2rem; }
+    .cta-sub { color: var(--pale); font-style: italic; font-size: 1.1rem; margin-bottom: 2.5rem; }
+    .btn-primary { display: inline-block; padding: 0.9rem 2.2rem; background: var(--ember); color: var(--black); font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em; text-decoration: none; clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)); transition: background 0.3s, transform 0.2s; margin: 0.4rem; }
+    .btn-primary:hover { background: var(--ember-glow); transform: translateY(-2px); }
+    .btn-secondary { display: inline-block; padding: 0.9rem 2.2rem; border: 1px solid var(--ash); color: var(--pale); font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em; text-decoration: none; clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)); transition: border-color 0.3s, color 0.3s; margin: 0.4rem; }
+    .btn-secondary:hover { border-color: var(--ember); color: var(--ember-glow); }
+
+    /* FOOTER */
+    footer { background: var(--black); border-top: 1px solid var(--iron); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.12em; color: var(--ember); }
+    .footer-copy { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--ash); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .section-inner { padding: 3.5rem 1.5rem; }
+      .pourquoi-grid, .deroulement-grid, .posture-cols { grid-template-columns: 1fr; gap: 2rem; }
+      .offre-grid, .formules-grid { grid-template-columns: 1fr; }
+      .aside-block { position: static; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Passeur<span>desPossibles</span></a>
+    <a href="index.html#accompagnement" class="nav-back">← Retour à l'accueil</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <p class="breadcrumb"><a href="index.html">Accueil</a> → Accompagnement → Parental & Éducatif</p>
+      <div class="hero-tag">Soutien à la parentalité · 0–18 ans</div>
+      <h1 class="hero-title">
+        <span class="accent">Accompagnement</span><br>
+        Parental<br>
+        & Éducatif
+      </h1>
+      <p class="hero-sub">
+        Être parent ne s'apprend pas dans un livre. Parfois il faut juste un espace pour souffler, réfléchir, et trouver comment faire autrement — sans être jugé, sans injonction, sans devoir être parfait.
+      </p>
+      <div class="hero-meta">
+        <div class="meta-item">
+          <strong>0–18 ans</strong>
+          Enfants accompagnés
+        </div>
+        <div class="meta-item">
+          <strong>Visio & Présentiel</strong>
+          Modalités disponibles
+        </div>
+        <div class="meta-item">
+          <strong>TISF · DEAES</strong>
+          Qualifications
+        </div>
+        <div class="meta-item">
+          <strong>12 ans</strong>
+          D'expérience terrain
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POURQUOI -->
+  <section id="pourquoi">
+    <div class="section-inner">
+      <div class="pourquoi-grid">
+        <div class="body-text reveal">
+          <p class="section-label">✦ Pourquoi cet accompagnement</p>
+          <h2 class="section-title">Quand la parentalité<br>devient un poids</h2>
+          <p>
+            La parentalité est l'un des rôles les plus exigeants qui soit — et l'un des moins outillés. On attend des parents qu'ils sachent naturellement comment faire face aux crises, aux résistances, aux silences de leurs enfants. <em>Comme si ça allait de soi.</em>
+          </p>
+          <p>
+            Mon expérience de <strong>12 ans auprès des familles</strong> m'a appris une chose : les parents qui demandent de l'aide ne sont pas des parents défaillants. Ce sont des parents qui cherchent à faire mieux — et qui ont eu le courage de dire qu'ils avaient besoin d'un regard extérieur.
+          </p>
+          <p>
+            Cet accompagnement s'adresse à vous si vous sentez que quelque chose coince, sans toujours savoir quoi — ou si vous savez exactement ce qui coince, mais pas comment y répondre.
+          </p>
+          <ul class="signal-list">
+            <li class="signal-item">Conflits répétés avec votre enfant ou adolescent</li>
+            <li class="signal-item">Sentiment de ne plus savoir comment poser des limites</li>
+            <li class="signal-item">Inquiétude face à un comportement qui change</li>
+            <li class="signal-item">Séparation, recomposition familiale, événement difficile</li>
+            <li class="signal-item">Épuisement parental, sentiment d'isolement</li>
+            <li class="signal-item">Enfant en situation de handicap ou de fragilité</li>
+          </ul>
+        </div>
+        <div class="reveal">
+          <div class="encart">
+            <div class="encart-title">🧭 Ce que je ne suis pas</div>
+            <p>Je ne suis ni psychologue ni thérapeute. Je n'établis pas de diagnostics et je ne prescris rien.</p>
+            <p>Je suis un <strong>éducateur spécialisé et formateur</strong>, avec 12 ans de pratique auprès de familles dans des contextes variés — fragilité sociale, handicap, protection de l'enfance, insertion jeunesse.</p>
+            <p>Mon rôle est d'<strong>accompagner la réflexion et l'action</strong>, pas de me substituer aux professionnels de santé. Si une situation nécessite un suivi psychologique ou médical, je vous oriente vers les bons interlocuteurs.</p>
+          </div>
+          <div class="encart" style="margin-top:1.5rem; border-left-color: var(--ember);">
+            <div class="encart-title" style="color:var(--ember);">🛡️ Confidentialité</div>
+            <p>Tout ce qui se dit dans nos échanges reste entre nous. Aucune information n'est partagée sans votre accord explicite.</p>
+            <p>Exception légale : en cas de danger grave pour un enfant, je suis soumis comme tout professionnel à l'obligation de signalement.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFRE -->
+  <section id="offre">
+    <div class="section-inner">
+      <p class="section-label gold reveal">✦ Ce que je propose</p>
+      <h2 class="section-title reveal">Les formats d'accompagnement</h2>
+      <p class="offre-intro reveal">Trois espaces distincts, adaptables à votre situation et à vos disponibilités.</p>
+      <div class="offre-grid">
+
+        <div class="offre-card reveal">
+          <div class="offre-icon">🎙️</div>
+          <div class="offre-name">Espace de Parole</div>
+          <div class="offre-format">Séance individuelle · Visio ou présentiel</div>
+          <p class="offre-desc">
+            Un espace confidentiel pour dire ce qui pèse, mettre des mots sur ce qui se passe à la maison, et repartir avec un regard neuf. Sans agenda préétabli — vous posez ce que vous avez besoin de poser.
+          </p>
+          <div class="offre-details">
+            <div class="offre-detail"><span>⏱</span> 1h par séance</div>
+            <div class="offre-detail"><span>📍</span> Visio (Zoom / Meet) ou présentiel</div>
+            <div class="offre-detail"><span>🔄</span> Ponctuel ou régulier selon le besoin</div>
+            <div class="offre-detail"><span>👤</span> Parent seul ou en couple</div>
+          </div>
+        </div>
+
+        <div class="offre-card reveal">
+          <div class="offre-icon">🗺️</div>
+          <div class="offre-name">Suivi Individualisé</div>
+          <div class="offre-format">Accompagnement sur la durée · Visio</div>
+          <p class="offre-desc">
+            Un accompagnement structuré sur plusieurs semaines, avec des objectifs co-définis, un fil conducteur entre les séances, et des outils concrets à expérimenter dans le quotidien familial.
+          </p>
+          <div class="offre-details">
+            <div class="offre-detail"><span>⏱</span> 1h à 1h30 par séance</div>
+            <div class="offre-detail"><span>📅</span> 1 séance / semaine ou toutes les 2 semaines</div>
+            <div class="offre-detail"><span>📋</span> Bilan à mi-parcours inclus</div>
+            <div class="offre-detail"><span>📲</span> Support entre séances (messagerie)</div>
+          </div>
+        </div>
+
+        <div class="offre-card reveal">
+          <div class="offre-icon">🏠</div>
+          <div class="offre-name">Intervention à Domicile</div>
+          <div class="offre-format">Présentiel · Hauts-de-France</div>
+          <p class="offre-desc">
+            Intervention directe au domicile familial — observation du quotidien, soutien dans les moments clés (repas, devoirs, coucher), et travail éducatif ancré dans la réalité concrète de votre vie de famille.
+          </p>
+          <div class="offre-details">
+            <div class="offre-detail"><span>⏱</span> 2h minimum par intervention</div>
+            <div class="offre-detail"><span>📍</span> Hauts-de-France (Caudry, Cambrai, Douai, Valenciennes, Lille)</div>
+            <div class="offre-detail"><span>🗓️</span> Sur rendez-vous, jours et horaires adaptés</div>
+            <div class="offre-detail"><span>👨‍👩‍👧</span> Toute la famille si besoin</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMULES -->
+  <section id="formules">
+    <div class="section-inner">
+      <p class="section-label reveal">✦ Formules & tarifs</p>
+      <h2 class="section-title reveal">Choisir ce qui vous correspond</h2>
+      <div class="formules-grid">
+
+        <div class="formule-card reveal">
+          <div class="formule-name">Séance unique</div>
+          <div class="formule-subtitle">Pour commencer, sans engagement</div>
+          <div class="formule-price">60€</div>
+          <div class="formule-price-label">par séance d'1h</div>
+          <ul class="formule-includes">
+            <li>1 séance visio ou présentiel (1h)</li>
+            <li>Espace de parole libre</li>
+            <li>Synthèse écrite envoyée après</li>
+            <li class="muted">Suivi entre séances</li>
+            <li class="muted">Bilan de parcours</li>
+          </ul>
+          <a href="https://calendly.com" target="_blank" class="btn-formule secondary">Réserver une séance</a>
+        </div>
+
+        <div class="formule-card featured reveal">
+          <div class="featured-badge">✦ Le plus choisi</div>
+          <div class="formule-name">Parcours 6 séances</div>
+          <div class="formule-subtitle">Suivi structuré sur 6 semaines</div>
+          <div class="formule-price">300€</div>
+          <div class="formule-price-label">soit 50€/séance · paiement en 2x possible</div>
+          <ul class="formule-includes">
+            <li>6 séances visio d'1h</li>
+            <li>Objectifs co-construits en séance 1</li>
+            <li>Outils éducatifs personnalisés</li>
+            <li>Support messagerie entre séances</li>
+            <li>Bilan de parcours écrit en séance 6</li>
+          </ul>
+          <a href="https://calendly.com" target="_blank" class="btn-formule primary">Démarrer le parcours</a>
+        </div>
+
+        <div class="formule-card reveal">
+          <div class="formule-name">Parcours 12 séances</div>
+          <div class="formule-subtitle">Transformation en profondeur</div>
+          <div class="formule-price">540€</div>
+          <div class="formule-price-label">soit 45€/séance · paiement en 3x possible</div>
+          <ul class="formule-includes">
+            <li>12 séances visio d'1h</li>
+            <li>Objectifs & indicateurs de progrès</li>
+            <li>Outils éducatifs personnalisés</li>
+            <li>Support messagerie prioritaire</li>
+            <li>Bilan à mi-parcours + bilan final</li>
+          </ul>
+          <a href="https://calendly.com" target="_blank" class="btn-formule secondary">En savoir plus</a>
+        </div>
+
+      </div>
+      <p class="tarif-note reveal">
+        Tarif intervention domicile : sur devis selon localisation · Tarif solidaire disponible sur demande pour situations de précarité
+      </p>
+    </div>
+  </section>
+
+  <!-- DÉROULEMENT -->
+  <section id="deroulement">
+    <div class="section-inner">
+      <div class="deroulement-grid">
+        <div>
+          <p class="section-label reveal">✦ Comment ça se passe</p>
+          <h2 class="section-title reveal">Du premier contact<br>à la première séance</h2>
+          <div class="steps">
+            <div class="step reveal">
+              <div class="step-dot">1</div>
+              <div class="step-body">
+                <div class="step-num">Étape 1 · Gratuit · 20 min</div>
+                <div class="step-title">Appel de découverte</div>
+                <p class="step-desc">Un premier échange téléphonique ou visio, sans engagement. Vous me décrivez votre situation, je vous explique comment je travaille. On vérifie ensemble que mon approche correspond à ce dont vous avez besoin.</p>
+              </div>
+            </div>
+            <div class="step reveal">
+              <div class="step-dot">2</div>
+              <div class="step-body">
+                <div class="step-num">Étape 2 · Séance 1</div>
+                <div class="step-title">Séance d'accueil</div>
+                <p class="step-desc">On prend le temps de tout poser — l'histoire, le contexte, ce qui a déjà été essayé. Pas de solutions précipitées. Juste de l'écoute active et les premières pistes de réflexion.</p>
+              </div>
+            </div>
+            <div class="step reveal">
+              <div class="step-dot">3</div>
+              <div class="step-body">
+                <div class="step-num">Étape 3 · Séances suivantes</div>
+                <div class="step-title">Travail en profondeur</div>
+                <p class="step-desc">Chaque séance a son fil conducteur. On alterne entre réflexion, outils concrets et retours d'expérience sur ce qui a été testé dans le quotidien. On avance à votre rythme, pas au mien.</p>
+              </div>
+            </div>
+            <div class="step reveal">
+              <div class="step-dot">4</div>
+              <div class="step-body">
+                <div class="step-num">Étape 4 · Fin de parcours</div>
+                <div class="step-title">Bilan & autonomie</div>
+                <p class="step-desc">La dernière séance est un bilan. Pas une fin — un point de départ. Vous repartez avec une synthèse écrite, les outils que vous avez construits, et la capacité d'avancer seul·e.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="aside-block">
+            <div class="aside-title">Ce que les parents disent</div>
+            <p class="aside-quote">
+              "Je n'avais pas besoin qu'on me dise quoi faire. J'avais besoin que quelqu'un m'aide à comprendre ce qui se passait vraiment."
+            </p>
+            <p class="aside-author">— Parent accompagné, adolescent de 14 ans</p>
+            <hr style="border:none; border-top:1px solid var(--iron); margin: 1.5rem 0;" />
+            <div class="aside-faq">
+              <div class="faq-item">
+                <p class="faq-q">Est-ce que mon enfant doit participer ?</p>
+                <p class="faq-a">Non, sauf si vous le souhaitez et qu'il est d'accord. L'accompagnement s'adresse en priorité aux parents. Des séances parent-enfant peuvent être proposées si c'est pertinent.</p>
+              </div>
+              <div class="faq-item">
+                <p class="faq-q">La visio fonctionne vraiment ?</p>
+                <p class="faq-a">Oui. La majorité des parents que j'accompagne choisissent la visio pour la flexibilité. La qualité de l'échange n'en souffre pas — parfois au contraire, être chez soi aide à parler plus librement.</p>
+              </div>
+              <div class="faq-item">
+                <p class="faq-q">Et si je ne suis pas prêt à m'engager sur 6 séances ?</p>
+                <p class="faq-a">Commencez par la séance unique. Si ça vous convient, on construit la suite ensemble.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POSTURE -->
+  <section id="posture">
+    <div class="section-inner">
+      <p class="section-label reveal">✦ Ce en quoi je crois</p>
+      <h2 class="section-title reveal">Ma posture avec les familles</h2>
+      <div class="posture-cols">
+        <ul class="posture-list">
+          <li class="posture-item reveal">
+            <div class="posture-marker">▸</div>
+            <div class="posture-content">
+              <h4>Aucun jugement, aucune norme</h4>
+              <p>Il n'existe pas de "bonne" façon d'être parent. Il existe des façons qui fonctionnent pour vous et votre enfant — et mon travail est de vous aider à les trouver, pas de vous imposer les miennes.</p>
+            </div>
+          </li>
+          <li class="posture-item reveal">
+            <div class="posture-marker">▸</div>
+            <div class="posture-content">
+              <h4>Vous êtes l'expert de votre enfant</h4>
+              <p>Vous le connaissez mieux que moi. J'apporte un regard extérieur et des outils — vous apportez la connaissance fine de votre enfant et de votre famille. On travaille ensemble, pas l'un contre l'autre.</p>
+            </div>
+          </li>
+          <li class="posture-item reveal">
+            <div class="posture-marker">▸</div>
+            <div class="posture-content">
+              <h4>Le changement prend du temps</h4>
+              <p>Je ne promets pas de miracles en trois séances. Ce que je promets, c'est un accompagnement honnête, ancré dans la durée, avec des résultats qui tiennent parce qu'ils viennent de vous.</p>
+            </div>
+          </li>
+        </ul>
+        <ul class="posture-list">
+          <li class="posture-item reveal">
+            <div class="posture-marker">▸</div>
+            <div class="posture-content">
+              <h4>La co-construction avant la prescription</h4>
+              <p>Je ne débarque pas avec un plan tout fait. Les outils qu'on utilise ensemble sont construits à partir de votre situation réelle — pas sortis d'un manuel.</p>
+            </div>
+          </li>
+          <li class="posture-item reveal">
+            <div class="posture-marker">▸</div>
+            <div class="posture-content">
+              <h4>Le quotidien comme terrain de jeu</h4>
+              <p>Ce qui se travaille en séance doit pouvoir s'expérimenter à la maison. Je propose des petites actions concrètes, testables entre deux séances — pas des théories inapplicables.</p>
+            </div>
+          </li>
+          <li class="posture-item reveal">
+            <div class="posture-marker">▸</div>
+            <div class="posture-content">
+              <h4>L'enfant reste au centre</h4>
+              <p>Même quand je n'accompagne que les parents, l'objectif final c'est le bien-être de l'enfant. C'est ce cap qui guide chaque séance, chaque outil, chaque décision.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta">
+    <div class="section-inner">
+      <div class="cta-inner reveal">
+        <p class="section-label gold">✦ Premier pas</p>
+        <h2 class="cta-title">Prêt à forger<br>une autre dynamique ?</h2>
+        <p class="cta-sub">L'appel de découverte est gratuit, sans engagement, et dure 20 minutes. C'est le seul moyen de savoir si on peut avancer ensemble.</p>
+        <div>
+          <a href="https://calendly.com" target="_blank" class="btn-primary">Réserver l'appel gratuit</a>
+          <a href="index.html#contact" class="btn-secondary">Envoyer un message</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Passeur des Possibles</div>
+    <div class="footer-copy">© 2025 Ismael · Tous droits réservés</div>
+    <a href="index.html" style="font-family:'Space Mono',monospace; font-size:0.58rem; letter-spacing:0.12em; color:var(--ash); text-decoration:none;">← Retour à l'accueil</a>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.08 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

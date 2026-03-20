@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Passeur des Possibles — PeakForge Method</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black: #0a0907;
+      --charcoal: #1a1714;
+      --iron: #2c2825;
+      --ash: #4a4540;
+      --smoke: #7a736a;
+      --pale: #c8bfb0;
+      --cream: #f0ebe3;
+      --ember: #ff6b1a;
+      --ember-glow: #ff9a4a;
+      --ember-deep: #8b3a0f;
+      --gold: #d4a853;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      padding: 1.2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(to bottom, rgba(10,9,7,0.97) 0%, transparent 100%);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem; letter-spacing: 0.12em;
+      color: var(--ember); text-decoration: none;
+    }
+    .nav-logo span { color: var(--pale); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--smoke); text-decoration: none; transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--ember-glow); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh; display: flex; align-items: center;
+      position: relative; overflow: hidden; padding: 8rem 3rem 5rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 75% 65%, rgba(255,107,26,0.13) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 15% 30%, rgba(139,58,15,0.08) 0%, transparent 60%),
+        linear-gradient(160deg, var(--black) 0%, #110d0a 100%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,107,26,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,107,26,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 860px; }
+    .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--ember); margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 8.5rem);
+      line-height: 0.93; letter-spacing: 0.02em; margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+    }
+    .hero-title .accent { color: var(--ember); }
+    .hero-sub {
+      font-size: 1.25rem; font-weight: 300; font-style: italic;
+      color: var(--pale); max-width: 540px; margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+    }
+    .hero-quote {
+      font-family: 'Space Mono', monospace; font-size: 0.7rem;
+      color: var(--smoke); border-left: 2px solid var(--ember-deep);
+      padding-left: 1rem; margin-bottom: 3rem;
+      opacity: 0; animation: fadeUp 0.8s 0.75s forwards;
+    }
+    .cta-group {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
+    }
+    .btn-primary {
+      display: inline-block; padding: 0.85rem 2rem;
+      background: var(--ember); color: var(--black);
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em;
+      text-decoration: none;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--ember-glow); transform: translateY(-2px); }
+    .btn-secondary {
+      display: inline-block; padding: 0.85rem 2rem;
+      border: 1px solid var(--ash); color: var(--pale);
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em;
+      text-decoration: none;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .btn-secondary:hover { border-color: var(--ember); color: var(--ember-glow); }
+
+    /* DIVIDER */
+    .forge-divider {
+      display: flex; align-items: center; gap: 1.5rem;
+      padding: 0 3rem; margin: 0 auto; max-width: 1100px;
+    }
+    .forge-divider::before, .forge-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--iron);
+    }
+    .forge-divider span {
+      font-family: 'Space Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--ash);
+      white-space: nowrap;
+    }
+
+    /* ABOUT */
+    #about { background: var(--charcoal); border-top: 1px solid var(--iron); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+      align-items: center;
+    }
+    .about-label {
+      font-family: 'Space Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--ember); margin-bottom: 1rem;
+    }
+    .about-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      line-height: 1; margin-bottom: 1.5rem; letter-spacing: 0.03em;
+    }
+    .about-text { color: var(--pale); font-size: 1.05rem; margin-bottom: 1.2rem; line-height: 1.7; }
+    .about-text em { color: var(--ember-glow); font-style: italic; }
+    .about-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2.5rem;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem;
+      color: var(--ember); letter-spacing: 0.05em; line-height: 1;
+    }
+    .stat-label {
+      font-family: 'Space Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--smoke);
+      margin-top: 0.3rem;
+    }
+    .forge-visual {
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .forge-circle {
+      width: 320px; height: 320px; border-radius: 50%;
+      border: 1px solid var(--iron);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .forge-circle::before {
+      content: ''; position: absolute; inset: 12px; border-radius: 50%;
+      border: 1px dashed var(--forge-ash, #4a4540);
+      animation: spin 30s linear infinite;
+    }
+    .forge-icon {
+      font-size: 5rem; line-height: 1;
+      filter: drop-shadow(0 0 20px rgba(255,107,26,0.4));
+    }
+    .forge-ring-text {
+      position: absolute; width: 100%; height: 100%;
+      animation: spin 20s linear infinite;
+    }
+
+    /* PILLARS */
+    #pillars { background: var(--black); border-top: 1px solid var(--iron); }
+    .pillars-header { text-align: center; margin-bottom: 4rem; }
+    .section-label {
+      font-family: 'Space Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--ember); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1; letter-spacing: 0.03em;
+    }
+    .pillars-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5px;
+      background: var(--iron);
+    }
+    .pillar-card {
+      background: var(--charcoal); padding: 2.5rem 2rem;
+      position: relative; overflow: hidden;
+      transition: background 0.3s;
+      cursor: default;
+    }
+    .pillar-card::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; background: var(--ember);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .pillar-card:hover { background: var(--iron); }
+    .pillar-card:hover::before { transform: scaleX(1); }
+    .pillar-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 4rem;
+      color: var(--forge-iron, #2c2825); line-height: 1;
+      position: absolute; top: 1rem; right: 1.5rem;
+      transition: color 0.3s;
+    }
+    .pillar-card:hover .pillar-num { color: rgba(255,107,26,0.15); }
+    .pillar-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .pillar-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+      letter-spacing: 0.05em; color: var(--ember); margin-bottom: 0.8rem;
+    }
+    .pillar-desc { font-size: 0.95rem; color: var(--smoke); line-height: 1.6; }
+
+    /* APPS */
+    #apps { background: var(--charcoal); border-top: 1px solid var(--iron); }
+    .apps-header { text-align: center; margin-bottom: 4rem; }
+    .apps-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+    }
+    .app-card {
+      background: var(--black); border: 1px solid var(--iron);
+      padding: 2rem; position: relative; overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      text-decoration: none; color: inherit; display: block;
+    }
+    .app-card:hover { border-color: var(--ember); transform: translateY(-4px); }
+    .app-card::after {
+      content: '→';
+      font-family: 'Space Mono', monospace;
+      position: absolute; bottom: 1.5rem; right: 1.5rem;
+      color: var(--ember); font-size: 1rem;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .app-card:hover::after { opacity: 1; }
+    .app-tag {
+      font-family: 'Space Mono', monospace; font-size: 0.58rem;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--ember); margin-bottom: 1rem;
+    }
+    .app-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem;
+      letter-spacing: 0.05em; margin-bottom: 0.8rem;
+    }
+    .app-desc { font-size: 0.95rem; color: var(--smoke); line-height: 1.6; }
+    .app-soon {
+      display: inline-block; margin-top: 1rem;
+      font-family: 'Space Mono', monospace; font-size: 0.58rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--ash); border: 1px solid var(--iron);
+      padding: 0.2rem 0.6rem;
+    }
+
+    /* MANIFESTE */
+    #manifeste {
+      background: var(--black); border-top: 1px solid var(--iron);
+      text-align: center;
+    }
+    .manifeste-inner { max-width: 760px; margin: 0 auto; }
+    .manifeste-quote {
+      font-family: 'Crimson Pro', serif; font-size: clamp(1.4rem, 3vw, 2rem);
+      font-style: italic; font-weight: 300;
+      color: var(--pale); line-height: 1.5; margin-bottom: 1.5rem;
+    }
+    .manifeste-quote strong { color: var(--ember); font-style: normal; font-weight: 600; }
+    .manifeste-author {
+      font-family: 'Space Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--smoke);
+    }
+
+    /* CONTACT */
+    #contact { background: var(--charcoal); border-top: 1px solid var(--iron); }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    }
+    .contact-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1; margin-bottom: 1.5rem;
+    }
+    .contact-text { color: var(--pale); font-size: 1.05rem; margin-bottom: 2rem; }
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: 1rem;
+      font-family: 'Space Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.1em; color: var(--smoke); text-decoration: none;
+      transition: color 0.3s;
+    }
+    .contact-link:hover { color: var(--ember-glow); }
+    .contact-link .icon { font-size: 1.2rem; }
+    .contact-form-area {
+      background: var(--black); border: 1px solid var(--iron); padding: 2.5rem;
+    }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label {
+      display: block; font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--smoke); margin-bottom: 0.5rem;
+    }
+    .form-input, .form-textarea {
+      width: 100%; background: var(--charcoal); border: 1px solid var(--iron);
+      color: var(--cream); font-family: 'Crimson Pro', serif; font-size: 1rem;
+      padding: 0.75rem 1rem; outline: none;
+      transition: border-color 0.3s;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--ember); }
+    .form-textarea { resize: vertical; min-height: 120px; }
+
+    /* FOOTER */
+    footer {
+      background: var(--black); border-top: 1px solid var(--iron);
+      padding: 2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
+      letter-spacing: 0.12em; color: var(--ember);
+    }
+    .footer-copy {
+      font-family: 'Space Mono', monospace; font-size: 0.58rem;
+      letter-spacing: 0.12em; color: var(--ash);
+    }
+    .footer-cc {
+      font-family: 'Space Mono', monospace; font-size: 0.58rem;
+      letter-spacing: 0.1em; color: var(--ash);
+    }
+
+    /* SECTION INNER */
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 6rem 3rem; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* SCROLL REVEAL */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s, transform 0.7s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .section-inner { padding: 4rem 1.5rem; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .pillars-grid { grid-template-columns: 1fr 1fr; }
+      .apps-grid { grid-template-columns: 1fr; }
+      .forge-visual { display: none; }
+      footer { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 500px) {
+      .pillars-grid { grid-template-columns: 1fr; }
+      #hero { padding: 7rem 1.5rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">Passeur<span>desPossibles</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">La méthode</a></li>
+      <li><a href="#pillars">Les piliers</a></li>
+      <li><a href="#apps">Applications</a></li>
+      <li><a href="#accompagnement">Accompagnement</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <p class="eyebrow">✦ Forge ton potentiel — Transmets ta flamme</p>
+      <h1 class="hero-title">
+        <span class="accent">Passeur</span><br>
+        des<br>
+        Possibles
+      </h1>
+      <p class="hero-sub">La méthode pour ceux qui refusent de se laisser définir par leurs contraintes.</p>
+      <p class="hero-quote">
+        "Le forgeron social ne subit pas le métal — il le transforme."<br>
+        — Ismael, Passeur des Possibles
+      </p>
+      <div class="cta-group">
+        <a href="#pillars" class="btn-primary">Découvrir la méthode</a>
+        <a href="#apps" class="btn-secondary">Accéder aux outils</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div>
+          <p class="about-label reveal">✦ Qui suis-je</p>
+          <h2 class="about-title reveal">Le forgeron<br>social</h2>
+          <p class="about-text reveal">
+            12 ans de terrain dans les contextes les plus complexes du travail social — protection de l'enfance, insertion jeunesse, handicap, mineurs isolés. <em>Formateur, éducateur, ingénieur pédagogique.</em>
+          </p>
+          <p class="about-text reveal">
+            J'ai créé la <strong>PeakForge Method</strong> parce que les outils existants ne suffisaient pas. Parce que transformer les autres commence par se transformer soi-même. Parce que chaque personne porte un potentiel que les circonstances n'ont pas encore révélé.
+          </p>
+          <div class="about-stats reveal">
+            <div class="stat-item">
+              <div class="stat-num">12</div>
+              <div class="stat-label">Ans de terrain</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">4</div>
+              <div class="stat-label">Piliers fondateurs</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">9</div>
+              <div class="stat-label">Ans vice-président</div>
+            </div>
+          </div>
+        </div>
+        <div class="forge-visual reveal">
+          <div class="forge-circle">
+            <div class="forge-icon">⚒️</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PILLARS -->
+  <section id="pillars">
+    <div class="section-inner">
+      <div class="pillars-header reveal">
+        <p class="section-label">✦ PeakForge Method</p>
+        <h2 class="section-title">Les 4 piliers</h2>
+      </div>
+      <div class="pillars-grid">
+        <div class="pillar-card reveal">
+          <div class="pillar-num">01</div>
+          <div class="pillar-icon">💪</div>
+          <div class="pillar-name">Corps</div>
+          <p class="pillar-desc">Le corps est le premier outil. Reprendre possession de son énergie physique, construire sa résistance, ancrer sa pratique dans la durée.</p>
+        </div>
+        <div class="pillar-card reveal">
+          <div class="pillar-num">02</div>
+          <div class="pillar-icon">🥗</div>
+          <div class="pillar-name">Nutrition</div>
+          <p class="pillar-desc">Ce que tu nourris détermine ce que tu construis. Optimiser son alimentation sans dogme, avec pragmatisme et continuité.</p>
+        </div>
+        <div class="pillar-card reveal">
+          <div class="pillar-num">03</div>
+          <div class="pillar-icon">🧠</div>
+          <div class="pillar-name">Esprit</div>
+          <p class="pillar-desc">Clarifier sa pensée, développer sa résilience mentale, apprendre à transformer les obstacles en leviers de croissance.</p>
+        </div>
+        <div class="pillar-card reveal">
+          <div class="pillar-num">04</div>
+          <div class="pillar-icon">🧭</div>
+          <div class="pillar-name">Trajectoire</div>
+          <p class="pillar-desc">Définir son cap, aligner ses actes avec son identité profonde, construire une vision de soi qui résiste aux tempêtes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFESTE -->
+  <section id="manifeste">
+    <div class="section-inner">
+      <div class="manifeste-inner reveal">
+        <p class="manifeste-quote">
+          "Le possible n'est pas ce que les autres t'autorisent à être —<br>
+          c'est ce que tu choisis de <strong>forger</strong> à partir de ce que tu es."
+        </p>
+        <p class="manifeste-author">— Ismael · Passeur des Possibles</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPS -->
+  <section id="apps">
+    <div class="section-inner">
+      <div class="apps-header reveal">
+        <p class="section-label">✦ Outils & Applications</p>
+        <h2 class="section-title">L'atelier numérique</h2>
+      </div>
+      <div class="apps-grid">
+        <a href="#" class="app-card reveal">
+          <p class="app-tag">Application · PeakForge</p>
+          <h3 class="app-name">PeakForge App</h3>
+          <p class="app-desc">L'application complète de la méthode PeakForge — suivi des 4 piliers, journaux de progression, outils de clarification.</p>
+        </a>
+        <div class="app-card reveal" style="cursor:default;">
+          <p class="app-tag">Pédagogie · TISF / DEAES</p>
+          <h3 class="app-name">Outils Formateurss</h3>
+          <p class="app-desc">Ressources pédagogiques, livrets d'apprentissage, learning games et outils de suivi de cohorte pour les formations sociales.</p>
+          <span class="app-soon">Bientôt disponible</span>
+        </div>
+        <div class="app-card reveal" style="cursor:default;">
+          <p class="app-tag">Développement · Identité</p>
+          <h3 class="app-name">Journal de Trajectoire</h3>
+          <p class="app-desc">Un espace de réflexion guidée pour clarifier sa trajectoire personnelle et professionnelle, pilier par pilier.</p>
+          <span class="app-soon">En développement</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCOMPAGNEMENT -->
+  <section id="accompagnement" style="background: var(--black); border-top: 1px solid var(--iron);">
+    <div class="section-inner">
+      <div class="pillars-header reveal">
+        <p class="section-label">✦ Accompagnement</p>
+        <h2 class="section-title">Parental & Éducatif</h2>
+      </div>
+      <p class="reveal" style="text-align:center; color:var(--pale); max-width:640px; margin: 0 auto 3.5rem; font-size:1.1rem; font-style:italic;">
+        12 ans auprès des familles, des jeunes en insertion et des enfants en situation de vulnérabilité — une approche humaine, outillée et sans jugement.
+      </p>
+      <div class="apps-grid">
+        <a href="accompagnement-parental.html" class="app-card reveal">
+          <p class="app-tag">Soutien à la parentalité · 0–18 ans</p>
+          <h3 class="app-name">Accompagnement Familial</h3>
+          <p class="app-desc">Espace de parole, suivi individualisé en visio, intervention à domicile — un accompagnement sans jugement pour les parents qui cherchent à faire autrement. Du nourrisson à l'adolescent.</p>
+        </a>
+        <a href="suivi-educatif.html" class="app-card reveal">
+          <p class="app-tag">Jeunesse & Insertion · 16–18 ans</p>
+          <h3 class="app-name">Suivi Éducatif Jeunes</h3>
+          <p class="app-desc">Accompagnement des jeunes 16–18 ans en rupture scolaire ou en décrochage — remobilisation, élaboration du projet de vie, insertion sociale et professionnelle. Expérience directe au sein du dispositif <em>Promo 16-18</em> à l'AFPA de Lomme.</p>
+        </a>
+        <div class="app-card reveal" style="cursor:default;">
+          <p class="app-tag">Protection · Handicap · MNA</p>
+          <h3 class="app-name">Contextes Complexes</h3>
+          <p class="app-desc">Expérience en MECS (protection de l'enfance), service d'observation ASE pour mineurs non accompagnés nouvellement arrivés, et accompagnement de personnes en situation de handicap aux Papillons Blancs — une pratique forgée dans les environnements les plus exigeants.</p>
+        </div>
+      </div>
+      <div class="reveal" style="margin-top:3rem; padding:2rem; background:var(--charcoal); border-left:3px solid var(--ember); max-width:700px; margin-left:auto; margin-right:auto;">
+        <p style="font-style:italic; color:var(--pale); font-size:1.05rem; line-height:1.7;">
+          "Chaque famille porte ses propres ressources. Mon rôle n'est pas de les remplacer — c'est de les révéler."
+        </p>
+        <p style="font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:0.15em; color:var(--smoke); margin-top:0.8rem; text-transform:uppercase;">— Ismael · TISF / DEAES / Médiation sociale</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="contact-grid">
+        <div>
+          <p class="about-label reveal">✦ Entrons en contact</p>
+          <h2 class="contact-title reveal">Forge ta<br>trajectoire</h2>
+          <p class="contact-text reveal">
+            Tu es formateur, éducateur, travailleur social ou simplement quelqu'un qui cherche à se réinventer ? Discutons de ce qui est possible.
+          </p>
+          <div class="contact-links reveal">
+            <a href="https://linkedin.com" class="contact-link" target="_blank">
+              <span class="icon">💼</span>
+              LinkedIn — Passeur des Possibles
+            </a>
+            <a href="https://calendly.com" class="contact-link" target="_blank">
+              <span class="icon">📅</span>
+              Réserver un échange — Calendly
+            </a>
+          </div>
+        </div>
+        <div class="contact-form-area reveal">
+          <div class="form-group">
+            <label class="form-label">Nom</label>
+            <input type="text" class="form-input" placeholder="Ton prénom" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" placeholder="ton@email.fr" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-textarea" placeholder="Ce que tu veux forger..."></textarea>
+          </div>
+          <a href="mailto:contact@passeursdespossibles.fr" class="btn-primary" style="display:inline-block;">Envoyer le message</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Passeur des Possibles</div>
+    <div class="footer-copy">© 2025 Ismael · Tous droits réservés</div>
+    <div class="footer-cc">Contenus sous licence CC BY-NC-ND 4.0</div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
