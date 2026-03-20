@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contextes Complexes — Ismail, Passeur des Possibles</title>
+  <meta name="description" content="Ismail — expérience en MECS, ASE, Papillons Blancs et MNA. Accompagnement dans les contextes les plus exigeants du travail social." />
+  <meta property="og:title" content="Contextes Complexes — Ismail Passeur des Possibles" />
+  <meta property="og:description" content="Protection de l'enfance, handicap, primo-arrivants à l'aide sociale à l'enfance — une pratique forgée dans les environnements les plus exigeants." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --black:#0a0907; --charcoal:#1a1714; --iron:#2c2825; --ash:#4a4540; --smoke:#7a736a; --pale:#c8bfb0; --cream:#f0ebe3; --ember:#ff6b1a; --ember-glow:#ff9a4a; --ember-deep:#8b3a0f; --gold:#d4a853; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--cream); font-family: 'Crimson Pro', Georgia, serif; font-size: 18px; line-height: 1.75; overflow-x: hidden; }
+
+    .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--ember); width: 0%; z-index: 9999; transition: width 0.1s; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 900; padding: 1.2rem 3rem; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(10,9,7,0.97) 0%, transparent 100%); }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.12em; color: var(--ember); text-decoration: none; }
+    .nav-logo span { color: var(--pale); }
+    .nav-back { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--smoke); text-decoration: none; transition: color 0.3s; }
+    .nav-back:hover { color: var(--ember-glow); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; z-index: 1000; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--pale); transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .mobile-menu { display: none; position: fixed; inset: 0; z-index: 800; background: rgba(10,9,7,0.98); backdrop-filter: blur(8px); flex-direction: column; align-items: center; justify-content: center; gap: 2rem; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 0.1em; color: var(--pale); text-decoration: none; transition: color 0.3s; padding: 0.4rem 1rem; display: block; }
+    .mobile-menu a:hover { color: var(--ember); }
+    .mobile-menu-footer { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--smoke); margin-top: 2rem; }
+    @media (max-width: 900px) { .hamburger { display: flex; } .nav-back { display: none; } }
+
+    #hero { min-height: 70vh; display: flex; align-items: flex-end; position: relative; overflow: hidden; padding: 6rem 3rem 4rem; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 50% 60% at 80% 40%, rgba(255,107,26,0.09) 0%, transparent 65%), linear-gradient(160deg, var(--black) 0%, #110d0a 100%); }
+    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,107,26,0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,26,0.055) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%); }
+    .hero-content { position: relative; z-index: 2; max-width: 900px; }
+    .breadcrumb { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--smoke); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s 0.1s forwards; }
+    .breadcrumb a { color: var(--ember); text-decoration: none; }
+    .hero-tag { display: inline-block; font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--black); background: var(--ember); padding: 0.25rem 0.8rem; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s 0.2s forwards; }
+    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.93; letter-spacing: 0.02em; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.7s 0.3s forwards; }
+    .hero-title .accent { color: var(--ember); }
+    .hero-sub { font-size: 1.2rem; font-weight: 300; font-style: italic; color: var(--pale); max-width: 620px; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.7s 0.5s forwards; border-left: 2px solid var(--ember-deep); padding-left: 1.2rem; }
+    .hero-meta { display: flex; gap: 2.5rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.7s 0.65s forwards; }
+    .meta-item { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--smoke); }
+    .meta-item strong { display: block; color: var(--ember); font-size: 1.1rem; margin-bottom: 0.1rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em; }
+
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 5rem 3rem; }
+    .section-label { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ember); margin-bottom: 1rem; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1; letter-spacing: 0.01em; margin-bottom: 2rem; }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s, transform 0.7s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* CONTEXTES */
+    #contextes { background: var(--charcoal); border-top: 1px solid var(--iron); }
+    .contexte-block { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: start; padding: 3rem 0; border-bottom: 1px solid var(--iron); }
+    .contexte-block:last-child { border-bottom: none; }
+    .contexte-aside { position: sticky; top: 6rem; }
+    .contexte-badge { display: inline-block; font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.08em; color: var(--ember); border: 1px solid var(--ember-deep); padding: 0.3rem 1rem; margin-bottom: 1rem; }
+    .contexte-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .contexte-name { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; letter-spacing: 0.05em; color: var(--cream); margin-bottom: 0.5rem; }
+    .contexte-org { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+    .contexte-body p { color: var(--pale); font-size: 1.02rem; line-height: 1.75; margin-bottom: 1.2rem; }
+    .contexte-body em { color: var(--ember-glow); font-style: italic; }
+    .contexte-body strong { color: var(--cream); }
+    .competences { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+    .competence { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--smoke); border: 1px solid var(--iron); padding: 0.3rem 0.7rem; }
+    .encart { background: var(--black); border: 0.5px solid var(--iron); border-left: 3px solid var(--ember); padding: 1.5rem; margin-top: 1.5rem; }
+    .encart-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--ember); letter-spacing: 0.05em; margin-bottom: 0.8rem; }
+    .encart p { color: var(--smoke); font-size: 0.92rem; line-height: 1.65; }
+
+    /* CE QUE J'AI APPRIS */
+    #lecons { background: var(--black); border-top: 1px solid var(--iron); }
+    .lecons-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--iron); }
+    .lecon-card { background: var(--charcoal); padding: 2rem 1.8rem; position: relative; }
+    .lecon-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--ember); }
+    .lecon-num { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: var(--iron); line-height: 1; margin-bottom: 0.5rem; }
+    .lecon-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--ember); letter-spacing: 0.05em; margin-bottom: 0.6rem; }
+    .lecon-desc { color: var(--smoke); font-size: 0.93rem; line-height: 1.65; }
+
+    /* POSTURE */
+    #posture { background: var(--charcoal); border-top: 1px solid var(--iron); }
+    .posture-quote { font-family: 'Crimson Pro', serif; font-size: clamp(1.3rem, 2.5vw, 1.8rem); font-style: italic; font-weight: 300; color: var(--pale); line-height: 1.5; border-left: 3px solid var(--ember); padding-left: 1.5rem; max-width: 760px; margin-bottom: 1rem; }
+    .posture-author { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--smoke); }
+
+    /* CTA */
+    #cta { background: var(--black); border-top: 1px solid var(--iron); text-align: center; }
+    .cta-inner { max-width: 680px; margin: 0 auto; }
+    .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1; margin-bottom: 1.2rem; }
+    .cta-sub { color: var(--pale); font-style: italic; font-size: 1.1rem; margin-bottom: 2.5rem; }
+    .btn-primary { display: inline-block; padding: 0.9rem 2.2rem; background: var(--ember); color: var(--black); font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em; text-decoration: none; -webkit-clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)); clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)); transition: background 0.3s, transform 0.2s; margin: 0.4rem; }
+    .btn-primary:hover { background: var(--ember-glow); transform: translateY(-2px); }
+    .btn-secondary { display: inline-block; padding: 0.9rem 2.2rem; border: 1px solid var(--ash); color: var(--pale); font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em; text-decoration: none; -webkit-clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)); clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)); transition: border-color 0.3s, color 0.3s; margin: 0.4rem; }
+    .btn-secondary:hover { border-color: var(--ember); color: var(--ember-glow); }
+
+    footer { background: var(--black); border-top: 1px solid var(--iron); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.12em; color: var(--ember); }
+    .footer-copy { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--ash); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .section-inner { padding: 3.5rem 1.5rem; }
+      .contexte-block { grid-template-columns: 1fr; gap: 2rem; }
+      .contexte-aside { position: static; }
+      .lecons-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  
+    
+    @media (max-width: 600px) {
+      body { font-size: 16px; }
+      .hero-title { font-size: clamp(2.8rem, 10vw, 4rem); }
+      .pillars-grid { grid-template-columns: 1fr !important; }
+      .pillar-card { padding: 1.5rem 1.2rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { transition: none; opacity: 1; transform: none; }
+      .hero-content > * { animation: none; opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progressBar"></div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Accueil</a>
+    <a href="qui-suis-je.html">Qui suis-je</a>
+    <a href="accompagnement-parental.html">Accompagnement parental</a>
+    <a href="suivi-educatif.html">Suivi éducatif</a>
+    <a href="index.html#contact">Contact</a>
+    <p class="mobile-menu-footer">Ismail · Passeur des Possibles</p>
+  </div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Ismail<span> · PasseurdesPossibles</span></a>
+    <button class="hamburger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    <a href="index.html#accompagnement" class="nav-back">← Retour à l'accueil</a>
+  </nav>
+
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <p class="breadcrumb"><a href="index.html">Accueil</a> → Accompagnement → Contextes Complexes</p>
+      <div class="hero-tag">Protection · Handicap · Primo-arrivants ASE</div>
+      <h1 class="hero-title"><span class="accent">Contextes</span><br>Complexes</h1>
+      <p class="hero-sub">Certains contextes d'intervention ne ressemblent à rien de ce qu'on apprend en formation. On les comprend en les vivant — et en refusant de s'y résigner.</p>
+      <div class="hero-meta">
+        <div class="meta-item"><strong>MECS</strong>Protection enfance</div>
+        <div class="meta-item"><strong>ASE · Primo-arrivants</strong>Mineurs isolés</div>
+        <div class="meta-item"><strong>Papillons Blancs</strong>Handicap</div>
+        <div class="meta-item"><strong>12 ans</strong>D'expérience</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contextes">
+    <div class="section-inner">
+      <p class="section-label reveal">✦ Trois contextes, une même exigence</p>
+      <h2 class="section-title reveal">Les terrains qui forgent</h2>
+
+      <!-- MECS -->
+      <div class="contexte-block reveal">
+        <div class="contexte-aside">
+          <div class="contexte-icon">🏠</div>
+          <div class="contexte-badge">MECS</div>
+          <div class="contexte-name">Protection de l'Enfance</div>
+          <div class="contexte-org">Maison d'Enfants à Caractère Social</div>
+        </div>
+        <div class="contexte-body">
+          <p>La MECS est un lieu où les enfants arrivent parce que leur famille ne peut plus — ou ne peut pas encore — assurer leur sécurité. Ce n'est pas un lieu de punition. C'est un lieu de <em>transition</em>, souvent douloureux, toujours chargé d'histoire.</p>
+          <p>Mon travail en MECS m'a appris ce que signifie <strong>tenir un cadre sans le transformer en prison</strong>. Ces enfants et adolescents ont souvent vécu des ruptures répétées — familles, écoles, placements. Chaque adulte qui part confirme, dans leur tête, qu'on finit toujours par les lâcher.</p>
+          <p>La continuité éducative, la constance dans la relation, la capacité à encaisser les crises sans se désengager — c'est là que se forge vraiment la posture éducative. Pas dans les formations.</p>
+          <div class="encart">
+            <div class="encart-title">Ce que j'y ai développé</div>
+            <p>Gestion de la vie quotidienne en collectif, soutien scolaire, travail sur le lien familial, préparation à l'autonomie des 18-21 ans, coordination avec les référents ASE, élaboration des projets pour l'enfant (PPE).</p>
+          </div>
+          <div class="competences">
+            <span class="competence">Vie quotidienne collective</span>
+            <span class="competence">Gestion de crise</span>
+            <span class="competence">PPE</span>
+            <span class="competence">Lien familial</span>
+            <span class="competence">Autonomisation 18-21 ans</span>
+            <span class="competence">Travail en équipe pluridisciplinaire</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASE MNA -->
+      <div class="contexte-block reveal">
+        <div class="contexte-aside">
+          <div class="contexte-icon">🌍</div>
+          <div class="contexte-badge">ASE · Primo-arrivants</div>
+          <div class="contexte-name">Primo-arrivants à l'Aide Sociale à l'Enfance</div>
+          <div class="contexte-org">Service d'Observation ASE · Aide Sociale à l'Enfance</div>
+        </div>
+        <div class="contexte-body">
+          <p>Accueillir un primo-arrivant confié à l'Aide Sociale à l'Enfance, c'est rencontrer quelqu'un qui a souvent traversé l'intraversable — et qui arrive sans repères, sans langue, parfois sans savoir exactement dans quel pays il se trouve.</p>
+          <p>Le service d'observation ASE est la première étape du dispositif de protection. L'objectif : <em>évaluer la situation réelle du jeune</em> — son âge, son histoire, ses besoins immédiats — et l'orienter vers la structure adaptée. Chaque jour compte.</p>
+          <p>Ce que cette expérience m'a donné : une <strong>capacité à créer du lien dans l'urgence</strong>, à travailler avec des interprètes, à naviguer dans des démarches administratives et juridiques complexes, et à ne jamais perdre de vue la personne derrière le dossier.</p>
+          <div class="encart">
+            <div class="encart-title">Ce que j'y ai développé</div>
+            <p>Accueil et évaluation de situation, travail avec interprètes, orientation vers dispositifs adaptés, accompagnement dans les démarches OFPRA/juge des tutelles, coordination avec associations spécialisées (MNA, droit des étrangers).</p>
+          </div>
+          <div class="competences">
+            <span class="competence">Évaluation de situation</span>
+            <span class="competence">Médiation interculturelle</span>
+            <span class="competence">Urgence sociale</span>
+            <span class="competence">Droit des mineurs</span>
+            <span class="competence">Travail avec interprètes</span>
+            <span class="competence">Orientation ASE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAPILLONS BLANCS -->
+      <div class="contexte-block reveal">
+        <div class="contexte-aside">
+          <div class="contexte-icon">🦋</div>
+          <div class="contexte-badge">Handicap</div>
+          <div class="contexte-name">Les Papillons Blancs</div>
+          <div class="contexte-org">Handicap mental · Accompagnement au quotidien</div>
+        </div>
+        <div class="contexte-body">
+          <p>Travailler aux Papillons Blancs, c'est apprendre à <em>ralentir sans s'appauvrir</em>. Le rythme de vie des personnes accompagnées n'est pas le nôtre — et c'est précisément ce qui oblige à revoir ce qu'on entend par "avancer".</p>
+          <p>L'accompagnement dans les actes de la vie quotidienne — se lever, manger, se vêtir, aller au travail, maintenir des liens sociaux — n'est pas une tâche mécanique. C'est un <strong>acte éducatif à part entière</strong>, qui demande autant de finesse que n'importe quelle intervention en protection de l'enfance.</p>
+          <p>Cette expérience m'a appris la patience fonctionnelle, la co-construction du projet personnalisé d'accompagnement, et l'art de valoriser des progrès invisibles pour ceux qui ne connaissent pas ces publics.</p>
+          <div class="encart">
+            <div class="encart-title">Ce que j'y ai développé</div>
+            <p>Accompagnement dans les actes de la vie quotidienne, élaboration et suivi du PPA (Projet Personnalisé d'Accompagnement), travail en équipe pluridisciplinaire (psychologue, ergothérapeute, éducateur technique), maintien des acquis, accès aux activités sociales et culturelles.</p>
+          </div>
+          <div class="competences">
+            <span class="competence">Handicap mental</span>
+            <span class="competence">PPA</span>
+            <span class="competence">Vie quotidienne</span>
+            <span class="competence">Équipe pluridisciplinaire</span>
+            <span class="competence">Maintien des acquis</span>
+            <span class="competence">Inclusion sociale</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CE QUE J'AI APPRIS -->
+  <section id="lecons">
+    <div class="section-inner">
+      <p class="section-label reveal">✦ Ce que ces terrains m'ont forgé</p>
+      <h2 class="section-title reveal">6 leçons impossibles à apprendre ailleurs</h2>
+      <div class="lecons-grid">
+        <div class="lecon-card reveal">
+          <div class="lecon-num">01</div>
+          <div class="lecon-title">La crise est une information</div>
+          <p class="lecon-desc">Dans ces contextes, la crise n'est pas un accident — c'est un langage. Apprendre à la lire sans la craindre change tout à la posture éducative.</p>
+        </div>
+        <div class="lecon-card reveal">
+          <div class="lecon-num">02</div>
+          <div class="lecon-title">Le quotidien est le terrain</div>
+          <p class="lecon-desc">Le repas, le réveil, la douche — ce sont des espaces éducatifs aussi puissants que n'importe quel entretien. La relation se construit dans les interstices.</p>
+        </div>
+        <div class="lecon-card reveal">
+          <div class="lecon-num">03</div>
+          <div class="lecon-title">L'institution peut nuire</div>
+          <p class="lecon-desc">Travailler dans des contextes contraints m'a appris à défendre la personne à l'intérieur même du système — sans naïveté, mais sans cynisme non plus.</p>
+        </div>
+        <div class="lecon-card reveal">
+          <div class="lecon-num">04</div>
+          <div class="lecon-title">La pluridisciplinarité est une force</div>
+          <p class="lecon-desc">Travailler avec des psychologues, médecins, juges, interprètes, assistantes sociales — ça oblige à savoir où s'arrête son rôle et où commencer à passer le relais.</p>
+        </div>
+        <div class="lecon-card reveal">
+          <div class="lecon-num">05</div>
+          <div class="lecon-title">La continuité vaut l'excellence</div>
+          <p class="lecon-desc">Être là, régulièrement, de façon prévisible — c'est souvent plus précieux que d'être brillant une fois. Ces publics ont besoin de repères stables avant tout.</p>
+        </div>
+        <div class="lecon-card reveal">
+          <div class="lecon-num">06</div>
+          <div class="lecon-title">Prendre soin de soi n'est pas un luxe</div>
+          <p class="lecon-desc">Ces terrains usent. La PeakForge Method est née en partie de cette réalité — on ne peut pas accompagner les autres dans la durée sans travailler sa propre résilience.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POSTURE -->
+  <section id="posture">
+    <div class="section-inner">
+      <div class="reveal">
+        <p class="section-label">✦ Ce que je retiens</p>
+        <p class="posture-quote">"Les contextes les plus difficiles ne m'ont pas endurci. Ils m'ont rendu plus attentif. Plus lent à juger. Plus capable d'entendre ce qui ne se dit pas."</p>
+        <p class="posture-author">— Ismail · Passeur des Possibles</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="cta">
+    <div class="section-inner">
+      <div class="cta-inner reveal">
+        <p class="section-label">✦ Travailler ensemble</p>
+        <h2 class="cta-title">Une situation complexe<br>mérite une approche forgée</h2>
+        <p class="cta-sub">Si vous accompagnez des personnes dans des contextes difficiles, ou si vous cherchez un regard extérieur sur une situation complexe — parlons-en.</p>
+        <div>
+          <a href="index.html#contact" class="btn-primary">Prendre contact</a>
+          <a href="qui-suis-je.html" class="btn-secondary">Mon parcours complet</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">Ismail · Passeur des Possibles</div>
+    <div class="footer-copy">© 2025 Ismail · Tous droits réservés</div>
+    <a href="index.html" style="font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;color:var(--ash);text-decoration:none;">← Retour à l'accueil</a>
+  </footer>
+
+  <script>
+    const bar = document.getElementById('progressBar');
+    if (bar) { window.addEventListener('scroll', () => { const h = document.documentElement; bar.style.width = Math.min((h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100, 100) + '%'; }); }
+    const burger = document.getElementById('burger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (burger) {
+      burger.addEventListener('click', () => { burger.classList.toggle('open'); mobileMenu.classList.toggle('open'); document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : ''; });
+      mobileMenu.querySelectorAll('a').forEach(a => { a.addEventListener('click', () => { burger.classList.remove('open'); mobileMenu.classList.remove('open'); document.body.style.overflow = ''; }); });
+    }
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.08 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
